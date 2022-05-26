@@ -2,19 +2,26 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 const ToDoListItem = (prop) => {
-  const { checked, setCheck, content, position } = prop;
+  const { checked, handleCheck, handleDelete, content, position } = prop;
   return (
-    <div>
+    <div className="flex_box_middle_spacing margin_4">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => {
-          setCheck(e.target.checked, position);
+          handleCheck(e.target.checked, position);
         }}
       />
       <span style={{ textDecoration: `${checked ? "line-through" : "none"}` }}>
         {content}
       </span>
+      <button
+        onClick={() => {
+          handleDelete(position);
+        }}
+      >
+        x
+      </button>
     </div>
   );
 };
@@ -45,6 +52,15 @@ const ToDoList = (prop) => {
     });
   };
 
+  const handleDelete = (itemPosition) => {
+    setState((state) => {
+      const toDoItems = state.toDoItems.filter((item, index) => {
+        return index !== itemPosition;
+      });
+      return { ...state, toDoItems };
+    });
+  };
+
   const handleFilter = (filter) => {
     setState((state) => {
       return { ...state, filter };
@@ -54,15 +70,15 @@ const ToDoList = (prop) => {
   const filteredItems = () => {
     const filterCheck = state.filter === "Completed";
     return state.toDoItems.map((item, index) => {
+      const props = {
+        ...item,
+        handleCheck,
+        handleDelete,
+        position: index,
+        key: index,
+      };
       if (state.filter === "All" || item.checked === filterCheck)
-        return (
-          <ToDoListItem
-            key={index}
-            {...item}
-            setCheck={handleCheck}
-            position={index}
-          />
-        );
+        return <ToDoListItem {...props} />;
       return null;
     });
   };

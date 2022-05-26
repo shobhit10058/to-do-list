@@ -1,6 +1,3 @@
-.App {
-}
-
 .centre_middle {
   margin: 5em auto;
   padding: 0.7em;
@@ -13,4 +10,11 @@
 }
 .centre_text {
   text-align: center;
+}
+.flex_box_middle_spacing {
+  display: flex;
+  justify-content: space-between;
+}
+.margin_4 {
+  margin: 4px;
 }
